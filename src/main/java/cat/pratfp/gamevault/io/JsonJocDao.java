@@ -28,7 +28,12 @@ public class JsonJocDao {
      */
     private static ObjectMapper creaMapper() {
         // Escriu aquí el teu codi (PR1-08)
-        return new ObjectMapper();
+        ObjectMapper om = new ObjectMapper();
+        om.registerModule(new JavaTimeModule());
+        om.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
+        om.disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
+        om.enable(SerializationFeature.INDENT_OUTPUT);
+        return  om;
     }
 
     /*
@@ -37,7 +42,7 @@ public class JsonJocDao {
      */
     public void escriu(Path p, List<Joc> jocs) throws IOException {
         // Escriu aquí el teu codi (PR1-08)
-        throw new UnsupportedOperationException("PR1-08: encara no està fet");
+        mapper.writerWithDefaultPrettyPrinter().writeValue(p.toFile(), jocs);
     }
 
     /*
@@ -47,6 +52,6 @@ public class JsonJocDao {
      */
     public List<Joc> llegeix(Path p) throws IOException {
         // Escriu aquí el teu codi (PR1-09)
-        throw new UnsupportedOperationException("PR1-09: encara no està fet");
+        return mapper.readValue(p.toFile(), new TypeReference<List<Joc>>() {});
     }
 }
