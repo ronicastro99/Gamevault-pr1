@@ -63,6 +63,32 @@ public class CsvJocDao {
                  * Pista: sessió 5, Ex3LlegeixCsvBrut.
                  */
                 // Escriu aquí el teu codi (PR1-06)
+                // 1. Comprovar si faltan campos:
+                if (c.length < 7) {
+                    incidencies.add("línia " + linia + ": incompleta");
+                    continue; // Passem a la següent iteració del bucle
+                }
+
+                try {
+
+                    int id = Integer.parseInt(c[0]);
+                    String titol = c[1];
+                    String plataforma = c[2];
+                    String estudi = c[3];
+                    java.time.LocalDate dataSortida = java.time.LocalDate.parse(c[4]);
+                    double hores = Double.parseDouble(c[5]);
+                    double nota = Double.parseDouble(c[6]);
+
+                    Joc joc = new Joc(id, titol, plataforma, estudi, dataSortida, hores, nota);
+                    jocs.add(joc);
+
+                } catch (NumberFormatException e) {
+                    incidencies.add("línia " + linia + ": número invàlid");
+                } catch (java.time.format.DateTimeParseException e) {
+                    incidencies.add("línia " + linia + ": data mal formada");
+                } catch (IllegalArgumentException e) {
+                    incidencies.add("línia " + linia + ": " + e.getMessage());
+                }
             }
         } catch (CsvValidationException e) {
             throw new IOException("CSV mal format a " + p, e);
