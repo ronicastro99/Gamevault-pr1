@@ -68,7 +68,13 @@ public class IndexHores {
      */
     public double llegeixHores(int posicio) throws IOException {
         // Escriu aquí el teu codi (PR1-12)
-        throw new UnsupportedOperationException("PR1-12: encara no està fet");
+        long offsetHores = Integer.BYTES + (long) LONG_TITOL * Character.BYTES; // 84 bytes
+        long posicioByte = (long) posicio * MIDA_REGISTRE + offsetHores;
+
+        try (RandomAccessFile raf = new RandomAccessFile(fitxer.toFile(), "r")) {
+            raf.seek(posicioByte);
+            return raf.readDouble();
+        }
     }
 
     /*
@@ -83,6 +89,19 @@ public class IndexHores {
      */
     public double sumaHores(int posicio, double extra) throws IOException {
         // Escriu aquí el teu codi (PR1-13)
-        throw new UnsupportedOperationException("PR1-13: encara no està fet");
+        long offsetHores = Integer.BYTES + (long) LONG_TITOL * Character.BYTES; // 84 bytes
+        long posicioByte = (long) posicio * MIDA_REGISTRE + offsetHores;
+
+        try (RandomAccessFile raf = new RandomAccessFile(fitxer.toFile(), "rw")) {
+
+            raf.seek(posicioByte);
+
+            double horesActuals = raf.readDouble();
+            double novesHores = horesActuals + extra;
+            raf.seek(posicioByte);
+            raf.writeDouble(novesHores);
+
+            return novesHores;
+        }
     }
 }
