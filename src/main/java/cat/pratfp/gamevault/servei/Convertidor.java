@@ -50,7 +50,21 @@ public class Convertidor {
      */
     public void desa(Path desti, List<Joc> jocs) throws CatalegException {
         // Escriu aquí el teu codi (PR1-10)
-        throw new UnsupportedOperationException("PR1-10: encara no està fet");
+        String nom = desti.getFileName().toString();
+
+        String extensio = nom.contains(".") ? nom.substring(nom.lastIndexOf('.') + 1).toLowerCase() : "";
+
+        try {
+
+            switch (extensio) {
+                case "csv" -> csv.escriu(desti, jocs);
+                case "json" -> json.escriu(desti, jocs);
+                default -> throw new CatalegException("Format no suportat: " + nom);
+            }
+        } catch (IOException e) {
+
+            throw new CatalegException("Error d'escriptura al fitxer " + nom, e);
+        }
     }
 
     /**
@@ -63,8 +77,11 @@ public class Convertidor {
      */
     public int converteix(Path origen, Path desti) throws CatalegException {
         // Escriu aquí el teu codi (PR1-10)
-        throw new UnsupportedOperationException("PR1-10: encara no està fet");
+        List<Joc> jocs = carrega(origen);
+        desa(desti, jocs);
+        return jocs.size();
     }
+
 
     /** Extensió del fitxer en minúscules i sense el punt ("" si no en té). */
     private static String extensio(Path p) {
