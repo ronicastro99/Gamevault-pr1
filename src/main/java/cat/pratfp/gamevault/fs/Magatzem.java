@@ -89,16 +89,18 @@ public class Magatzem {
      * Pista: sessió 2, Ex5Recorre. Files.walk obre recursos del sistema: va dins d'un try-with-resources.
      */
     public long midaTotal() throws IOException {
-        // Escriu aquí el teu codi (PR1-04)
-        throw new UnsupportedOperationException("PR1-04: encara no està fet");
-    }
+        long total = 0;
 
-    /**
-     * Llista els fitxers regulars del magatzem amb la seva mida, ordenats per ruta.
-     *
-     * @return una línia per fitxer, amb el format "ruta relativa (N bytes)"
-     * @throws IOException si no es pot recórrer la carpeta
-     */
+        try (java.util.stream.Stream<Path> rutes = Files.walk(base)) {
+            for (java.util.Iterator<Path> it = rutes.iterator(); it.hasNext(); ) {
+                Path arxiu = it.next();
+                if (Files.isRegularFile(arxiu)) {
+                    total += Files.size(arxiu);
+                }
+            }
+        }
+        return total;
+    }
     public List<String> inventari() throws IOException {
         try (Stream<Path> camins = Files.walk(base)) {
             return camins.filter(Files::isRegularFile)
