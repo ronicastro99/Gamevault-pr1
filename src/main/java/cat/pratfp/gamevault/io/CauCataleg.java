@@ -28,9 +28,12 @@ public class CauCataleg {
      * Pista: sessió 6, Ex1Serialitza.
      */
     public void desa(Path p, List<Joc> jocs) throws IOException {
-        // Escriu aquí el teu codi (PR1-11)
-        throw new UnsupportedOperationException("PR1-11: encara no està fet");
+        try (java.io.ObjectOutputStream out = new java.io.ObjectOutputStream(java.nio.file.Files.newOutputStream(p))) {
+
+            out.writeObject(new java.util.ArrayList<>(jocs));
+        }
     }
+
 
     /**
      * Recupera el catàleg desat amb {@link #desa(Path, List)}.
@@ -42,6 +45,10 @@ public class CauCataleg {
     @SuppressWarnings("unchecked")
     public List<Joc> carrega(Path p) throws IOException {
         // Escriu aquí el teu codi (PR1-11)
-        throw new UnsupportedOperationException("PR1-11: encara no està fet");
+        try (ObjectInputStream in = new ObjectInputStream(Files.newInputStream(p))) {
+            return (List<Joc>) in.readObject();
+        } catch (ClassNotFoundException e) {
+            throw new IOException("No s'ha trobat la classe en llegir el fitxer binari", e);
+        }
     }
 }

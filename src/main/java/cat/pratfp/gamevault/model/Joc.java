@@ -10,7 +10,7 @@ import java.time.LocalDate;
  * El constructor compacte valida les dades abans de crear l'objecte.
  */
 public record Joc(int id, String titol, String plataforma, String estudi,
-                  LocalDate dataSortida, double horesJugades, double nota) {   // TODO PR1-11 (2a part): fes que Joc es pugui serialitzar
+                  LocalDate dataSortida, double horesJugades, double nota) implements java.io.Serializable {   // TODO PR1-11 (2a part): fes que Joc es pugui serialitzar
      /**
      * Valida les dades d'un joc en el moment de crear-lo.
      * @throws IllegalArgumentException si el títol és buit, les hores negatives o la nota no està entre 0 i 10
