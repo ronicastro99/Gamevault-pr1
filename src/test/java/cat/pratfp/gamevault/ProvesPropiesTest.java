@@ -1,10 +1,15 @@
 package cat.pratfp.gamevault;
+import cat.pratfp.gamevault.io.IndexHores;
+import cat.pratfp.gamevault.model.Joc;
+import cat.pratfp.gamevault.servei.CatalegException;
+import cat.pratfp.gamevault.servei.Convertidor;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
 
 import java.nio.file.Path;
+import java.time.LocalDate;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -22,16 +27,31 @@ class ProvesPropiesTest {
     Path tmp;
 
     @Test
-    @DisplayName("PR1-14 · la meva primera prova")
+    @DisplayName("IndexHores gestiona i trunca un títol de més de 40 caràcters")
     void primeraProva() throws Exception {
         // Escriu aquí el teu codi (PR1-14)
-        fail("PR1-14: escriu la teva primera prova");
+
+        Path fitxerIndex = tmp.resolve("hores_llarg.dat");
+        IndexHores index = new IndexHores(fitxerIndex);
+
+        String titolMoltLlarg = "Super Mario Bros Wonder Deluxe Edition Extended Remastered";
+        Joc jocLlarg = new Joc(1, titolMoltLlarg, "Switch", "Nintendo", LocalDate.of(2023, 10, 20), 30.0, 9.5);
+
+        assertDoesNotThrow(() -> index.escriu(0, jocLlarg));
+        assertEquals(30.0, index.llegeixHores(0));
+        assertEquals(1, index.nombreRegistres());
     }
 
     @Test
-    @DisplayName("PR1-14 · la meva segona prova")
+    @DisplayName("PR1-14 · Convertidor llança CatalegException quan el format no és suportat (.xml)")
     void segonaProva() throws Exception {
         // Escriu aquí el teu codi (PR1-14)
-        fail("PR1-14: escriu la teva segona prova");
+        Convertidor convertidor = new Convertidor();
+        Path fitxerXml = tmp.resolve("jocs.xml");
+
+        // Carregar un format desconegut ha de llançar CatalegException amb el missatge adequat
+        CatalegException ex = assertThrows(CatalegException.class, () -> convertidor.carrega(fitxerXml));
+        assertTrue(ex.getMessage().contains("Format no suportat"));
     }
 }
+
