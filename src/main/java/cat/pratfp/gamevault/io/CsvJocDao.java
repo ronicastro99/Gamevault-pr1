@@ -107,9 +107,16 @@ public class CsvJocDao {
      */
     public void escriu(Path p, List<Joc> jocs) throws IOException {
         // Escriu aquí el teu codi (PR1-07)
-        throw new UnsupportedOperationException("PR1-07: encara no està fet");
-    }
+        try (java.io.Writer w = java.nio.file.Files.newBufferedWriter(p, java.nio.charset.StandardCharsets.UTF_8);
+             var csv = new com.opencsv.CSVWriterBuilder(w).withSeparator(SEPARADOR).build()) {
 
+            csv.writeNext(CAPCALERA, false);
+
+            for (Joc j : jocs) {
+                csv.writeNext(aCamps(j), false);
+            }
+        }
+    }
     /**
      * Converteix un Joc en la fila de text que espera el CSV.
      *
