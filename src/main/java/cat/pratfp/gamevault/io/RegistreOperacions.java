@@ -14,7 +14,9 @@ import java.time.format.DateTimeFormatter;
  */
 public class RegistreOperacions {
 
-    /** Format de la data i hora de cada línia: 2026-10-13 15:10:02 */
+    /**
+     * Format de la data i hora de cada línia: 2026-10-13 15:10:02
+     */
     public static final DateTimeFormatter FORMAT = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 
     private final Path fitxer;
@@ -37,7 +39,18 @@ public class RegistreOperacions {
      * Pista: sessió 5, Ex1FluxosDeText (StandardOpenOption).
      */
     public void registra(String text) throws IOException {
-        // Escriu aquí el teu codi (PR1-05)
-        throw new UnsupportedOperationException("PR1-05: encara no està fet");
+        // 1. línia amb la data, l'hora i el text rebut
+        String linia = java.time.LocalDateTime.now().format(FORMAT) + " | " + text;
+
+        // 2.  BufferedWriter amb try-with-resources, UTF-8 i mode APPEND
+        try (java.io.BufferedWriter writer = java.nio.file.Files.newBufferedWriter(
+                fitxer,
+                java.nio.charset.StandardCharsets.UTF_8,
+                java.nio.file.StandardOpenOption.CREATE,
+                java.nio.file.StandardOpenOption.APPEND)) {
+
+            writer.write(linia);
+            writer.newLine(); // Afegim un salt de línia al final
+        }
     }
 }

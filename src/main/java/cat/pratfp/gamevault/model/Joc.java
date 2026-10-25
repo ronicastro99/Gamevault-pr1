@@ -11,15 +11,9 @@ import java.time.LocalDate;
  */
 public record Joc(int id, String titol, String plataforma, String estudi,
                   LocalDate dataSortida, double horesJugades, double nota) {   // TODO PR1-11 (2a part): fes que Joc es pugui serialitzar
-
-    /*
-     * TODO PR1-01 · Validació del model (CA 1.6)
-     * Si alguna dada no és vàlida, llança IllegalArgumentException amb un missatge que contingui
-     * la paraula indicada (les proves i el CsvJocDao fan servir aquest missatge):
-     *   - títol null o en blanc      -> el missatge ha de contenir "títol"
-     *   - hores jugades negatives    -> el missatge ha de contenir "hores"
-     *   - nota més petita que 0 o més gran que 10 -> el missatge ha de contenir "nota"
-     * Els valors límit (nota 0 i nota 10, 0 hores) SÍ que són vàlids.
+     /**
+     * Valida les dades d'un joc en el moment de crear-lo.
+     * @throws IllegalArgumentException si el títol és buit, les hores negatives o la nota no està entre 0 i 10
      */
     public Joc {
             if (titol == null || titol.isBlank()) {
@@ -34,4 +28,5 @@ public record Joc(int id, String titol, String plataforma, String estudi,
                 throw new IllegalArgumentException("La nota ha d'estar entre 0 i 10");
             }
         }
+
     }
