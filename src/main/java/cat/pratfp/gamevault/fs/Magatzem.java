@@ -66,10 +66,22 @@ public class Magatzem {
      * Retorna la ruta de la còpia.
      */
     public Path copiaSeguretat(Path fitxer) throws IOException {
-        // Escriu aquí el teu codi (PR1-03)
-        throw new UnsupportedOperationException("PR1-03: encara no està fet");
-    }
 
+        String nomOriginal = fitxer.getFileName().toString();
+
+        int puntIndex = nomOriginal.lastIndexOf('.');
+        String nom = nomOriginal.substring(0, puntIndex);
+        String extensio = nomOriginal.substring(puntIndex);
+
+
+        String nouNom = nom + "_" + marcaDeTemps() + extensio;
+
+        Path desti = copies().resolve(nouNom);
+
+        java.nio.file.Files.copy(fitxer, desti, java.nio.file.StandardCopyOption.REPLACE_EXISTING);
+
+        return desti;
+    }
     /*
      * TODO PR1-04 · Mida total del magatzem (CA 1.1)
      * Retorna la suma de les mides (en bytes) de TOTS els fitxers regulars que hi ha dins de la
